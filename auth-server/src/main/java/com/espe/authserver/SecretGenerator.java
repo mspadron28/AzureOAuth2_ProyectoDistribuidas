@@ -7,7 +7,7 @@ public class SecretGenerator {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         // Generar un nuevo secreto
-        String rawSecret = "rootroot";  // Cambia esto por tu contraseña deseada
+        String rawSecret = "12345";  // Cambia esto por tu contraseña deseada
         String encodedSecret = passwordEncoder.encode(rawSecret);
 
         // Imprimir el secreto encriptado

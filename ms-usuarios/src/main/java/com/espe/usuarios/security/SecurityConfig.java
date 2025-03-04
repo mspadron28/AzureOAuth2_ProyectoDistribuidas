@@ -18,16 +18,18 @@ public class SecurityConfig {
                         // 🚀 Permitir acceso público a los endpoints necesarios
                         .requestMatchers(HttpMethod.GET, "/api/usuarios/**").permitAll()
 
+
                         // 🔐 Proteger los demás endpoints con JWT y scopes
-                        .requestMatchers(HttpMethod.GET, "/api/clientes/**").hasAuthority("SCOPE_read")
-                        .requestMatchers(HttpMethod.POST, "/api/clientes").hasAuthority("SCOPE_write")
+                        .requestMatchers(HttpMethod.GET, "/api/clientes/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/clientes").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/clientes/{id}").hasAuthority("SCOPE_write")
                         .requestMatchers(HttpMethod.DELETE, "/api/clientes/{id}").hasAuthority("SCOPE_write")
 
-                        .requestMatchers(HttpMethod.GET, "/api/proveedores/**").hasAuthority("SCOPE_read")
-                        .requestMatchers(HttpMethod.POST, "/api/proveedores").hasAuthority("SCOPE_write")
-                        .requestMatchers(HttpMethod.PUT, "/api/proveedores/{id}").hasAuthority("SCOPE_write")
-                        .requestMatchers(HttpMethod.DELETE, "/api/proveedores/{id}").hasAuthority("SCOPE_write")
+
+                        .requestMatchers(HttpMethod.GET, "/api/proveedores/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/proveedores").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/proveedores/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/proveedores/{id}").permitAll()
 
                         .anyRequest().authenticated()
                 )
@@ -36,6 +38,7 @@ public class SecurityConfig {
                 // 🔥 Aplica OAuth2 solo a los endpoints protegidos, no a `/api/usuarios/buscar`
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
+                        /*
                         .authenticationEntryPoint((request, response, authException) -> {
                             if (request.getRequestURI().startsWith("/api/usuarios/buscar")) {
                                 response.setStatus(200); // Permitir acceso sin autenticación
@@ -43,6 +46,8 @@ public class SecurityConfig {
                                 response.sendError(401, "Unauthorized");
                             }
                         })
+
+                         */
                 );
         return http.build();
     }

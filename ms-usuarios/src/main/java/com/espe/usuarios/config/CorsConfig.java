@@ -13,12 +13,12 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*") // Permitir todos los orígenes
-                        .allowedMethods("*") // Permitir todos los métodos HTTP
-                        .allowedHeaders("*") // Permitir todos los encabezados
-                        .exposedHeaders("*") // Exponer todos los encabezados
-                        .allowCredentials(false); // Sin credenciales
+                registry.addMapping("/**") // Aplica CORS a todos los endpoints
+                        .allowedOrigins("http://localhost:3000") // 🔥 Permitir solo Next.js, NO "*"
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
+                        .allowedHeaders("*") // Permitir cualquier header
+                        .exposedHeaders("Authorization") // Si necesitas recibir Authorization en la respuesta
+                        .allowCredentials(true); // 🔥 Permite cookies y autenticación
             }
         };
     }

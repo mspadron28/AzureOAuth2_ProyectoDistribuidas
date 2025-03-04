@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/proveedores")
+@CrossOrigin(origins = "http://localhost:3000") // 🔥 Permitir solicitudes desde el frontend
 public class ProveedorController {
 
     @Autowired

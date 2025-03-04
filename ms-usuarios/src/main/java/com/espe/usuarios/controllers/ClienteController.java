@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/clientes")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") // 🔥 Permitir Next.js
 public class ClienteController {
 
     @Autowired
