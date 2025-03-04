@@ -39,8 +39,31 @@ export default function ClienteHome() {
     }
   };
 
+  const fetchServicios = async (token: string) => {
+    try {
+      const response = await fetch('/api/proxy/servicios', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al obtener los servicios');
+      }
+
+      const data = await response.json();
+      console.log('✅ Servicios obtenidos:', data);
+      setServicios(data);
+    } catch (error: any) {
+      console.error('❌ Error al obtener servicios:', error.message);
+      setError(error.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchServicios = async () => {
+    const init = async () => {
       try {
         const tokenRes = await fetch('/api/auth/token', { credentials: 'include' });
 
@@ -74,26 +97,9 @@ export default function ClienteHome() {
         setClienteId(userData.id);
         console.log('🔹 ID del Cliente:', userData.id);
 
-        // 🔥 Obtener reservas del cliente
+        // 🔄 Obtener reservas y servicios
         await fetchReservas(userData.id, access_token);
-
-        // 🔥 Obtener todos los servicios disponibles
-        const response = await fetch('/api/proxy/servicios', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Error al obtener los servicios');
-        }
-
-        const data = await response.json();
-        console.log('✅ Servicios obtenidos:', data);
-
-        setServicios(data);
+        await fetchServicios(access_token);
       } catch (error: any) {
         console.error('❌ Error:', error.message);
         setError(error.message);
@@ -102,7 +108,7 @@ export default function ClienteHome() {
       }
     };
 
-    fetchServicios();
+    init();
   }, []);
 
   // 🔥 Función para abrir el modal de reserva y obtener las fechas reservadas
@@ -173,14 +179,38 @@ export default function ClienteHome() {
 
       // 🔄 Llamar a `fetchReservas` para actualizar la lista en tiempo real
       await fetchReservas(clienteId, token);
+      await fetchServicios(token);
     } catch (error: any) {
       console.error('❌ Error:', error.message);
       setError(error.message);
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      // 🔄 Forzar la eliminación de la cookie en el navegador
+      document.cookie = 'access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+
+      // 🔄 Redirigir al usuario a la página de inicio
+      window.location.href = '/';
+    } catch (error) {
+      console.error('❌ Error al cerrar sesión:', error);
+    }
+  };
+
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-black text-white'>
+      <button
+        onClick={handleLogout}
+        className='absolute top-4 right-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition'
+      >
+        Cerrar Sesión
+      </button>
       <div className='w-3/4 p-6 bg-gray-900 rounded-lg shadow-lg'>
         <h2 className='text-3xl font-bold mb-4 text-center'>Reservas Realizadas</h2>
 
