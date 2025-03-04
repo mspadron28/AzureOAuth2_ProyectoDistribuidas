@@ -1,0 +1,20 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://127.0.0.1:9000"
+      client:
+        registration:
+          ms-services:
+            provider: spring
+            client-id: ms-services
+            client-secret: rootroot
+            authorization-grant-type: client_credentials
+            scope:
+              - read
+              - write
+            client-name: ms-services
+        provider:
+          spring:
+            token-uri: "http://127.0.0.1:9000/oauth2/token"
