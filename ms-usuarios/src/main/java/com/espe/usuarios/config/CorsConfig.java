@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Aplica CORS a todos los endpoints
-                        .allowedOrigins("http://localhost:3000") // 🔥 Permitir solo Next.js, NO "*"
+                        .allowedOrigins("http://172.191.30.75:3000") // 🔥 Permitir solo Next.js, NO "*"
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
                         .allowedHeaders("*") // Permitir cualquier header
                         .exposedHeaders("Authorization") // Si necesitas recibir Authorization en la respuesta

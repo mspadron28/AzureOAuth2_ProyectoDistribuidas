@@ -15,7 +15,7 @@ services:
       - services-data:/var/lib/mysql
 
   services-app:
-    image: services-app-image
+    image: matias28/services-app-image:latest
     container_name: services-app
     ports:
       - "8002:8002"
@@ -48,7 +48,7 @@ services:
       - users-data:/var/lib/postgresql/data
 
   users-app:
-    image: users-app-image
+    image: matias28/users-app-image:v1
     container_name: users-app
     ports:
       - "8003:8003"
@@ -64,19 +64,19 @@ services:
       - SPRING_SECURITY_OAUTH2_ISSUER_URI=http://authserver-app:9000
 
   authserver-app:
-    image: authserver-app-image
+    image: matias28/authserver-app-image:latest
     container_name: authserver-app
     ports:
       - "9000:9000"
     networks:
       - services-net
     environment:
-      - SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI=http://localhost:3000/api/auth/callback
+      - SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI=http://172.191.30.75:3000/api/auth/callback
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_LOGIN=http://127.0.0.1:8080/login/oauth2/code/client-app
       - USERS_URL=http://users-app:8003/api/usuarios
 
   client-app:
-    image: client-app-image
+    image: client-app-image:latest
     container_name: client-app
     ports:
       - "8080:8080"
@@ -84,9 +84,15 @@ services:
       - services-net
     environment:
       - SPRING_SECURITY_OAUTH2_ISSUER_URI=http://authserver-app:9000
-      - SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI=http://localhost:3000/api/auth/callback
-      - SPRING_SECURITY_AUTHORIZATION_URI=http://localhost:9000/oauth2/authorize
-  
+      - SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI=http://172.191.30.75:3000/api/auth/callback
+      - SPRING_SECURITY_AUTHORIZATION_URI=http://172.191.30.75:9000/oauth2/authorize
+
+  frontend-services:
+    image: matias28/frontend-services:latest
+    container_name: frontend-services
+    ports:
+      - "3000:3000"
+
 networks:
   services-net:
 
