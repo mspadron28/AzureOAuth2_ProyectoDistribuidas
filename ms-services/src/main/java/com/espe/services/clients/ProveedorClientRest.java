@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "ms-usuarios",contextId = "proveedorClient", url = "http://localhost:8003/api/proveedores")
+@FeignClient(name = "ms-usuarios",contextId = "proveedorClient", url ="${PROVEEDOR_URL}")
 public interface ProveedorClientRest {
 
     @GetMapping

@@ -51,7 +51,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig  {
 
     @Bean
     @Order(1)
@@ -94,10 +94,9 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/client-app")
+                .redirectUri(System.getenv("SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_LOGIN"))
                 //.redirectUri("http://127.0.0.1:8080/authorized")
-                .redirectUri("http://localhost:3000/api/auth/callback")
-                .postLogoutRedirectUri("http://127.0.0.1:8080/logout")
+                .redirectUri(System.getenv("SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI"))
                 .scope("read")
                 .scope("write")
                 .scope(OidcScopes.OPENID)
@@ -170,23 +169,13 @@ public class SecurityConfig {
         return new ProviderManager(authenticationProvider);
     }
 
-   /* @Bean
-    public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer() {
         return context -> {
             if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
-                // Si el flujo es client_credentials, agregamos los scopes manualmente
-                if (context.getAuthorizationGrantType().equals(AuthorizationGrantType.CLIENT_CREDENTIALS)) {
-                    context.getClaims().claims(claims -> {
-                        claims.put("scope", List.of("read", "write")); // Forzar los scopes manualmente
-                    });
-                } else {
-                    // Para otros flujos, usa los scopes de `context.getAuthorizedScopes()`
-                    context.getClaims().claims(claims -> {
-                        claims.put("scope", context.getAuthorizedScopes());
-                    });
-                }
+                context.getClaims().issuer("http://authserver-app:9000"); // Forzar el iss
             }
         };
-    }*/
+    }
 
 }

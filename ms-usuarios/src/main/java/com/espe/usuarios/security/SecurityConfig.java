@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/clientes/{id}").hasAuthority("SCOPE_write")
                         .requestMatchers(HttpMethod.DELETE, "/api/clientes/{id}").hasAuthority("SCOPE_write")
 
-
+    
                         .requestMatchers(HttpMethod.GET, "/api/proveedores/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/proveedores").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/proveedores/{id}").permitAll()

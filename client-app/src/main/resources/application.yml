@@ -3,7 +3,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "http://127.0.0.1:9000"
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_ISSUER_URI}
       client:
         registration:
           client-app:
@@ -12,7 +12,7 @@ spring:
             client-secret: 12345
             authorization-grant-type: authorization_code
             #redirect-uri: "http://127.0.0.1:8080/authorized"
-            redirect-uri: "http://localhost:3000/api/auth/callback"
+            redirect-uri: ${SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI}
             scope:
               - openid
               - profile
@@ -21,6 +21,7 @@ spring:
             client-name: client-app
         provider:
           spring:
-            issuer-uri: "http://127.0.0.1:9000"
-
-
+            authorization-uri: ${SPRING_SECURITY_AUTHORIZATION_URI}
+            token-uri: "http://authserver-app:9000/oauth2/token"
+            user-info-uri: "http://authserver-app:9000/userinfo"
+            jwk-set-uri: "http://authserver-app:9000/.well-known/jwks.json"

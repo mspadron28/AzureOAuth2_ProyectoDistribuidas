@@ -14,4 +14,7 @@ public class Proveedor {
     private String telefono;
     private String empresa;
 
+    public Long getId() {
+        return id;
+    }
 }

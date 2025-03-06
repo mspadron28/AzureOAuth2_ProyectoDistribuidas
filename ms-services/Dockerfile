@@ -19,8 +19,8 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copiar el Jar desde la etapa de compilacion
-COPY --from=builder /app/target/ms-cursos-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/target/ms-services-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8002
 # Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar","ms-cursos-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar","ms-services-0.0.1-SNAPSHOT.jar"]

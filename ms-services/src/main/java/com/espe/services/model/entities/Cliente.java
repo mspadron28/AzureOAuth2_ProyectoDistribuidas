@@ -14,4 +14,7 @@ public class Cliente {
     private String telefono;
     private String direccion;
 
+    public Long getId() {
+        return id;
+    }
 }

@@ -1,0 +1,96 @@
+version: "3.8"
+
+services:
+  services-db:
+    image: mysql:latest
+    container_name: services-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: servicesdb
+    ports:
+      - "3353:3306"
+    networks:
+      - services-net
+    volumes:
+      - services-data:/var/lib/mysql
+
+  services-app:
+    image: services-app-image
+    container_name: services-app
+    ports:
+      - "8002:8002"
+    depends_on:
+      - services-db
+    networks:
+      - services-net
+    environment:
+      - SERVER_PORT=8002
+      - SPRING_DATASOURCE_URL=jdbc:mysql://services-db:3306/servicesdb
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - CLIENTE_URL=http://users-app:8003/api/clientes
+      - PROVEEDOR_URL=http://users-app:8003/api/proveedores
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://authserver-app:9000
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_SPRING_TOKEN_URI=http://authserver-app:9000/oauth2/token
+
+  users-db:
+    image: postgres:latest
+    container_name: users-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: usuariosdb
+    ports:
+      - "5501:5432"
+    networks:
+      - services-net
+    volumes:
+      - users-data:/var/lib/postgresql/data
+
+  users-app:
+    image: users-app-image
+    container_name: users-app
+    ports:
+      - "8003:8003"
+    depends_on:
+      - users-db
+    networks:
+      - services-net
+    environment:
+      - SERVER_PORT=8003
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://users-db:5432/usuariosdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_SECURITY_OAUTH2_ISSUER_URI=http://authserver-app:9000
+
+  authserver-app:
+    image: authserver-app-image
+    container_name: authserver-app
+    ports:
+      - "9000:9000"
+    networks:
+      - services-net
+    environment:
+      - SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI=http://localhost:3000/api/auth/callback
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_LOGIN=http://127.0.0.1:8080/login/oauth2/code/client-app
+      - USERS_URL=http://users-app:8003/api/usuarios
+
+  client-app:
+    image: client-app-image
+    container_name: client-app
+    ports:
+      - "8080:8080"
+    networks:
+      - services-net
+    environment:
+      - SPRING_SECURITY_OAUTH2_ISSUER_URI=http://authserver-app:9000
+      - SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI=http://localhost:3000/api/auth/callback
+      - SPRING_SECURITY_AUTHORIZATION_URI=http://localhost:9000/oauth2/authorize
+  
+networks:
+  services-net:
+
+
+volumes:
+  services-data:
+  users-data:

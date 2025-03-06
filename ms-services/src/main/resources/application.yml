@@ -3,7 +3,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: "http://127.0.0.1:9000"
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}
       client:
         registration:
           ms-services:
@@ -17,4 +17,4 @@ spring:
             client-name: ms-services
         provider:
           spring:
-            token-uri: "http://127.0.0.1:9000/oauth2/token"
+            token-uri: ${SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_SPRING_TOKEN_URI}

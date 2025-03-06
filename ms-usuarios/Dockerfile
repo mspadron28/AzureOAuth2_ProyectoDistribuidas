@@ -19,8 +19,8 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copiar el Jar desde la etapa de comilacion
-COPY --from=builder /app/target/estudiantes-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/target/ms-usuarios-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8003
 # Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar","estudiantes-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar","ms-usuarios-0.0.1-SNAPSHOT.jar"]
