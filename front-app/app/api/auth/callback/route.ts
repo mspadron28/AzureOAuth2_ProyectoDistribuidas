@@ -25,7 +25,7 @@ export async function GET(request: Request) {
       body: new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        redirect_uri: 'http://172.191.30.75:3000/api/auth/callback',
+        redirect_uri: 'http://localhost:3000/api/auth/callback',
       }).toString(),
     });
 
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
     console.log('🔍 Buscando usuario con email:', userEmail);
 
     // 🔥 Usamos el proxy en lugar de llamar directamente al backend
-    const userResponse = await fetch(`http://172.191.30.75:3000/api/proxy/usuarios?email=${userEmail}`);
+    const userResponse = await fetch(`http://127.0.0.1:3000/api/proxy/usuarios?email=${userEmail}`);
 
     if (!userResponse.ok) {
       const errorText = await userResponse.text();

@@ -11,7 +11,6 @@ spring:
             client-id: client-app
             client-secret: 12345
             authorization-grant-type: authorization_code
-            #redirect-uri: "http://127.0.0.1:8080/authorized"
             redirect-uri: ${SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI}
             scope:
               - openid

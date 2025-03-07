@@ -95,7 +95,6 @@ public class SecurityConfig  {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri(System.getenv("SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_LOGIN"))
-                //.redirectUri("http://127.0.0.1:8080/authorized")
                 .redirectUri(System.getenv("SPRING_SECURITY_OAUTH2_REDIRECT_FRONT_URI"))
                 .scope("read")
                 .scope("write")
